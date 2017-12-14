@@ -1,30 +1,24 @@
 import layout from 'views/layout/';
-import signIn from 'views/signIn/';
-import pageNotFound from 'components/pageNotFound/';
-import mainMenus from './mainMenus';
+import main from './main';
+
+//按需引入
+const pageForbidden = () => import('views/pageForbidden/');
+const pageNotFound  = () => import( 'views/pageNotFound/');
 
 export default [{
     index: '',
     path: '',
     name: '',
     component: layout,
-    children: mainMenus
-  },
-  {
-    id: -1,
-    index: '-1',
-    path: '/signIn',
-    name: 'signin',
-    title: '登录',
-    component: signIn
+    children: main
   },
   {
     path: '/403',
-    component: r => require.ensure([], () => r(require('@/components/pageForbidden/')), 'page-forbiddened')
+    component: pageForbidden
   },
   {
     path: '/404',
-    component: r => require.ensure([], () => r(require('@/components/pageNotFound/')), 'page-not-found')
+    component: pageNotFound
   },
   {
     path: '*',

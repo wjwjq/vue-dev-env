@@ -4,16 +4,13 @@ import router from 'router/';
 import store from 'store/';
 import app from 'views/layout/';
 
-console.info(app);
-
 // import 'element-ui/lib/theme-default/index.css';
 
 // Vue.use(ElementUI);
-// Vue.use(VueRouter);
 
 new Vue({
   el: '#app',
-  render: h => h(app)
+  render: h => h(app),
   router,
   store
 })

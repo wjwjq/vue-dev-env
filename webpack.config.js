@@ -1,7 +1,9 @@
 const path = require('path');
+const webpack = require('webpack');
+const Merge = require('webpack-merge');
 const CleanWebpackPlugin = require('clean-webpack-plugin'); //在每次build之前，清空dist目录及其子目录
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin'); //生成index.html
 
 const ROOT_PATH = path.resolve(__dirname);
 const APP_PATH = path.resolve(ROOT_PATH, 'src');
@@ -10,13 +12,39 @@ const BUILD_PATH = path.join(__dirname, 'dist');
 
 const COMPONENTS_PATH = path.resolve(APP_PATH, 'components');
 const VIEWS_PATH = path.resolve(APP_PATH, 'views');
+const ROUTER_PATH = path.resolve(APP_PATH, 'router');
 const STORE_PATH = path.resolve(APP_PATH, 'store');
 const UTILS_PATH = path.resolve(APP_PATH, 'lib/utils');
 const API_PATH = path.resolve(APP_PATH, 'lib/api');
 const IMAGES_PATH = path.resolve(APP_PATH, 'assets/images');
 const STYLES_PATH = path.resolve(APP_PATH, 'assets/styles');
 
-module.exports = {
+const getLocalIPv4 = () => {
+  const os = require('os');
+  const interfaces = os.networkInterfaces();
+  let details;
+  for (let key in interfaces) {
+    for (let i = 0; i < interfaces[key].length; i++) {
+      details = interfaces[key][i];
+      if (details.family === 'IPv4' && (key === 'en0' || key === 'eth0' || key === '以太网')) {
+        return details.address;
+      }
+    }
+  }
+  return '127.0.0.1';
+};
+
+const getPort = () => {
+  let port = 8080;
+  process.argv.forEach((argv, idx, argvs) => {
+    if (argv === '--port') {
+      port = Number(argvs[idx + 1]) ? argvs[idx + 1] : port;
+    }
+  });
+  return port;
+};
+
+const commonConfig = {
   //页面入口文件配置
   entry: {
     commons: [
@@ -41,12 +69,7 @@ module.exports = {
         test: /\.vue$/,
         use: [{
           loader: 'vue-loader',
-          options: {
-            extractCSS: true,
-            postLoaders: {
-              html: 'babel-loader'
-            }
-          }
+          options: {}
         }]
       },
       {
@@ -108,6 +131,27 @@ module.exports = {
         include: [APP_PATH]
       },
       {
+        test: /\.(png|jpg|gif|jpeg|svg)$/,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 8192,
+            name: `images/[hash:8].[name].[ext]`
+          }
+        }],
+        exclude: /^node_modules$/
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf)$/,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 100000,
+            name: `fonts/[name].[ext]`
+          }
+        }]
+      },
+      {
         test: /\.html$/,
         use: ['html-loader'],
         include: [APP_PATH]
@@ -123,7 +167,9 @@ module.exports = {
   resolve: {
     alias: { // 配置目录别名
       'vue$': 'vue/dist/vue.esm.js',
+      '@': APP_PATH,
       components: COMPONENTS_PATH,
+      router: ROUTER_PATH,
       views: VIEWS_PATH,
       store: STORE_PATH,
       utils: UTILS_PATH,
@@ -149,6 +195,88 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'commons',
       minChunks: Infinity
-    })
+    }),
+    //生成HTML文件
+    new HtmlWebpackPlugin({
+      title: 'app',
+      template: './index.html',
+      chunksSortMode: 'dependency',
+      favicon: 'src/assets/images/favicon.png', //配置favicon
+      inject: true
+    }),
   ]
 };
+
+module.exports = Merge(commonConfig, process.env.NODE_ENV === 'production' ? {
+  // devtool: 'source-map',
+  output: {
+    filename: `js/${commonConfig.output.filename}`,
+    chunkFilename: `js/[name].[hash].js`
+  },
+  //插件项
+  plugins: [
+    //CSS文件单独打包
+    new ExtractTextPlugin({
+      filename: `css/style.css`,
+      disable: false,
+      allChunks: true
+    }),
+    //文件压缩
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      comments: false,
+      compress: {
+        warnings: false,
+        'drop_console': true
+      }
+    }),
+    //加载器最小化
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      context: __dirname,
+      debug: false
+    }),
+    //生成文件顶部加入注释
+    new webpack.BannerPlugin({
+      banner: 'This file is created by eagleagle, ' + new Date(),
+      raw: false,
+      entryOnly: true
+    }),
+
+  ]
+} : {
+  devtool: 'inline-source-map',
+  devServer: {
+    proxy: { // proxy URLs to backend development server
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+        // pathRewrite: { '^/api': '' }
+      },
+      '/images': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+      }
+    },
+    host: '0.0.0.0',
+    public: `${ getLocalIPv4() }:${ getPort() }`, //允许其它主机访问
+    port: getPort(),
+    disableHostCheck: true,
+    allowedHosts: [],
+    compress: true, // enable gzip compression
+    historyApiFallback: true, // true for index.html upon 404, object for multiple paths
+    hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
+    https: false, // true for self-signed, object for cert authority
+    noInfo: false, // only errors & warns on hot reload
+    open: true,
+    watchOptions: {
+      poll: true
+    }
+  },
+
+  //插件项
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+  ]
+});
