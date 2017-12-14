@@ -1,9 +1,10 @@
 import Vue from 'vue';
-// import VueRouter from 'vue-router';
 // import ElementUI from 'element-ui';
-// import router from 'router/';
-// import store from 'store/';
-// import app from 'views/layout/';
+import router from 'router/';
+import store from 'store/';
+import app from 'views/layout/';
+
+console.info(app);
 
 // import 'element-ui/lib/theme-default/index.css';
 
@@ -11,7 +12,8 @@ import Vue from 'vue';
 // Vue.use(VueRouter);
 
 new Vue({
-  components: { app },
-//   router,
-//   store
-}).$mount('#app');
+  el: '#app',
+  render: h => h(app)
+  router,
+  store
+})

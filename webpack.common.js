@@ -42,10 +42,10 @@ module.exports = {
         use: [{
           loader: 'vue-loader',
           options: {
-            extractCSS: true
-          },
-          postLoaders: {
-            html: 'babel-loader'
+            extractCSS: true,
+            postLoaders: {
+              html: 'babel-loader'
+            }
           }
         }]
       },
@@ -122,6 +122,7 @@ module.exports = {
 
   resolve: {
     alias: { // 配置目录别名
+      'vue$': 'vue/dist/vue.esm.js',
       components: COMPONENTS_PATH,
       views: VIEWS_PATH,
       store: STORE_PATH,
