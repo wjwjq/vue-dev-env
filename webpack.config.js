@@ -1,6 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
-const Merge = require("webpack-merge");
+const merge = require("webpack-merge");
 const CleanWebpackPlugin = require("clean-webpack-plugin"); //在每次build之前，清空dist目录及其子目录
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin"); //生成index.html
@@ -224,7 +224,7 @@ const commonConfig = {
   ]
 };
 
-module.exports = Merge(commonConfig, isProduction ? {
+module.exports = merge(commonConfig, isProduction ? {
   // devtool: 'source-map',
   output: {
     filename: `static/js/${commonConfig.output.filename}`,
