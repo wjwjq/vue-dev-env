@@ -5,9 +5,9 @@
         <div>counter msg: {{ counterMsg }}</div>
         <div>
             <button @click="handleIncrease">+</button>
-            <button
+            <button 
                 @click="handleDecrease" 
-                style="margin-left: 30px;">
+                style="margin-left: 30px;" >
                 -
             </button>
         </div>

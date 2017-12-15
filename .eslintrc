@@ -124,6 +124,28 @@
     ],
     "vue/html-self-closing": [
       "error"
+    ],
+    "vue/no-multi-spaces": [
+      "error"
+    ],
+    "vue/require-prop-types": [
+      "error"
+    ],
+    "vue/require-default-prop": [
+      "error"
+    ],
+    "vue/order-in-components": [
+      "warn"
+    ],
+    "vue/max-attributes-per-line": [
+      "error",
+      {
+        "singleline": 3,
+        "multiline": {
+          "max": 1,
+          "allowFirstLine": false
+        }
+      }
     ]
   }
 }
