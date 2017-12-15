@@ -8,19 +8,21 @@ const HtmlWebpackPlugin = require("html-webpack-plugin"); //生成index.html
 const isProduction = process.env.NODE_ENV === "production";
 
 const ROOT_PATH = path.resolve(__dirname);
-const APP_PATH = path.resolve(ROOT_PATH, "src");
+const APP_PATH = path.resolve(ROOT_PATH, "src"); 
 const APP_FILE = path.resolve(APP_PATH, "app.js");
 const BUILD_PATH = path.join(__dirname, "build");
-
+const TEMPLATE_PATH = path.resolve(ROOT_PATH, "index.html");
 const COMPONENTS_PATH = path.resolve(APP_PATH, "components");
 const VIEWS_PATH = path.resolve(APP_PATH, "views");
 const ROUTER_PATH = path.resolve(APP_PATH, "router");
 const STORE_PATH = path.resolve(APP_PATH, "store");
 const UTILS_PATH = path.resolve(APP_PATH, "lib/utils");
-const API_PATH = path.resolve(APP_PATH, "lib/api");
-const IMAGES_PATH = path.resolve(APP_PATH, "assets/images");
-const STYLES_PATH = path.resolve(APP_PATH, "assets/styles");
-const FAVICON_PATH =path.resolve(IMAGES_PATH, "favicon.png");
+const API_PATH = path.resolve(APP_PATH, "lib/api"); 
+const IMAGES_PATH = path.resolve(APP_PATH, "assets/images"); //图片目录
+const STYLES_PATH = path.resolve(APP_PATH, "assets/styles"); //样式目录
+const FAVICON_PATH =path.resolve(IMAGES_PATH, "favicon.png"); //favicon目录
+
+const PROXY_URI = "http://localhost:3000"; //反向代理地址
 
 const getLocalIPv4 = () => {
   const os = require("os");
@@ -108,8 +110,7 @@ const commonConfig = {
               importLoaders: 1,
               localIdentName: "[local]-[hash:base64:8]"
             }
-          }, "postcss-loader"],
-          publicPath: "dist"
+          }, "postcss-loader"]
         }) : ["style-loader", {
           loader: "css-loader",
           options: {
@@ -134,8 +135,7 @@ const commonConfig = {
               importLoaders: 1,
               localIdentName: "[local]-[hash:base64:8]"
             }
-          }, "postcss-loader", "less-loader"],
-          publicPath: "dist"
+          }, "postcss-loader", "less-loader"]
         }) : ["style-loader", {
           loader: "css-loader",
           options: {
@@ -153,7 +153,7 @@ const commonConfig = {
         loader: "url-loader",
         options: {
           limit: 8192,
-          name: `images/[hash:8].[name].[ext]`
+          name: `static/images/[hash:8].[name].[ext]`
         }
       }],
       exclude: /^node_modules$/
@@ -164,7 +164,7 @@ const commonConfig = {
         loader: "url-loader",
         options: {
           limit: 100000,
-          name: `fonts/[name].[ext]`
+          name: `static/fonts/[name].[ext]`
         }
       }]
     },
@@ -207,7 +207,7 @@ const commonConfig = {
       "vue-router": "vue-router",
       "vuex": "vuex"
     }),
-    new CleanWebpackPlugin(["dist"]),
+    new CleanWebpackPlugin([BUILD_PATH]),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: "commons",
@@ -216,9 +216,9 @@ const commonConfig = {
     //生成HTML文件
     new HtmlWebpackPlugin({
       title: "app",
-      template: "./index.html",
+      template: TEMPLATE_PATH,
       chunksSortMode: "dependency",
-      favicon: FAVICON_PATH, //配置favicon
+      favicon: FAVICON_PATH,
       inject: true
     })
   ]
@@ -266,13 +266,9 @@ module.exports = Merge(commonConfig, isProduction ? {
   devServer: {
     proxy: { // proxy URLs to backend development server
       "/api": {
-        target: "http://localhost:3000",
+        target: PROXY_URI,
         changeOrigin: true
         // pathRewrite: { '^/api': '' }
-      },
-      "/images": {
-        target: "http://localhost:3000",
-        changeOrigin: true
       }
     },
     host: "0.0.0.0",

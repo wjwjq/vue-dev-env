@@ -113,6 +113,17 @@
     ],
     "vue/jsx-uses-vars": [
       "error"
+    ],
+    "vue/html-quotes": [
+      "error",
+      "double"
+    ],
+    "vue/html-indent": [
+      "warn",
+      4
+    ],
+    "vue/html-self-closing": [
+      "error"
     ]
   }
 }

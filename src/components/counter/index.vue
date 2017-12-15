@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <div>state counter: {{ counter().counter }}</div>
-    <div>query counter: {{ queryCounter() }}</div>
-    <div>counter msg: {{ counterMsg }}</div>
     <div>
-      <button @click="handleIncrease">+</button>
-      <button
-        @click="handleDecrease" 
-        style="margin-left: 30px;">
-        -
-      </button>
+        <div>state counter: {{ counter().counter }}</div>
+        <div>query counter: {{ queryCounter() }}</div>
+        <div>counter msg: {{ counterMsg }}</div>
+        <div>
+            <button @click="handleIncrease">+</button>
+            <button
+                @click="handleDecrease" 
+                style="margin-left: 30px;">
+                -
+            </button>
+        </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
