@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin"); //生成index.html
 const isProduction = process.env.NODE_ENV === "production";
 
 const ROOT_PATH = path.resolve(__dirname);
-const APP_PATH = path.resolve(ROOT_PATH, "src"); 
+const APP_PATH = path.resolve(ROOT_PATH, "src");
 const APP_FILE = path.resolve(APP_PATH, "app.js");
 const BUILD_PATH = path.join(__dirname, "build");
 const TEMPLATE_PATH = path.resolve(ROOT_PATH, "index.html");
@@ -17,10 +17,10 @@ const VIEWS_PATH = path.resolve(APP_PATH, "views");
 const ROUTER_PATH = path.resolve(APP_PATH, "router");
 const STORE_PATH = path.resolve(APP_PATH, "store");
 const UTILS_PATH = path.resolve(APP_PATH, "lib/utils");
-const API_PATH = path.resolve(APP_PATH, "lib/api"); 
+const API_PATH = path.resolve(APP_PATH, "lib/api");
 const IMAGES_PATH = path.resolve(APP_PATH, "assets/images"); //图片目录
 const STYLES_PATH = path.resolve(APP_PATH, "assets/styles"); //样式目录
-const FAVICON_PATH =path.resolve(IMAGES_PATH, "favicon.png"); //favicon目录
+const FAVICON_PATH = path.resolve(IMAGES_PATH, "favicon.png"); //favicon目录
 
 const PROXY_URI = "http://localhost:3000"; //反向代理地址
 
@@ -227,14 +227,14 @@ const commonConfig = {
 module.exports = Merge(commonConfig, isProduction ? {
   // devtool: 'source-map',
   output: {
-    filename: `js/${commonConfig.output.filename}`,
-    chunkFilename: `js/[name].[hash].js`
+    filename: `static/js/${commonConfig.output.filename}`,
+    chunkFilename: `static/js/[name].[hash].js`
   },
   //插件项
   plugins: [
     //CSS文件单独打包
     new ExtractTextPlugin({
-      filename: `css/style.css`,
+      filename: `static/css/style.css`,
       disable: false,
       allChunks: true
     }),
@@ -272,7 +272,7 @@ module.exports = Merge(commonConfig, isProduction ? {
       }
     },
     host: "0.0.0.0",
-    public: `${ getLocalIPv4() }:${ getPort() }`, //允许其它主机访问
+    public: `${getLocalIPv4()}:${getPort()}`, //允许其它主机访问
     port: getPort(),
     disableHostCheck: true,
     allowedHosts: [],
