@@ -1,0 +1,14 @@
+<template>
+  <h1>{{ message }}</h1>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      message: "页面2"
+    };
+  }
+};
+</script>
+

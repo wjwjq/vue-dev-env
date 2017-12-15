@@ -1,43 +1,46 @@
-const path = require('path');
-const webpack = require('webpack');
-const Merge = require('webpack-merge');
-const CleanWebpackPlugin = require('clean-webpack-plugin'); //在每次build之前，清空dist目录及其子目录
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin'); //生成index.html
+const path = require("path");
+const webpack = require("webpack");
+const Merge = require("webpack-merge");
+const CleanWebpackPlugin = require("clean-webpack-plugin"); //在每次build之前，清空dist目录及其子目录
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin"); //生成index.html
+
+const isProduction = process.env.NODE_ENV === "production";
 
 const ROOT_PATH = path.resolve(__dirname);
-const APP_PATH = path.resolve(ROOT_PATH, 'src');
-const APP_FILE = path.resolve(APP_PATH, 'app.js');
-const BUILD_PATH = path.join(__dirname, 'dist');
+const APP_PATH = path.resolve(ROOT_PATH, "src");
+const APP_FILE = path.resolve(APP_PATH, "app.js");
+const BUILD_PATH = path.join(__dirname, "build");
 
-const COMPONENTS_PATH = path.resolve(APP_PATH, 'components');
-const VIEWS_PATH = path.resolve(APP_PATH, 'views');
-const ROUTER_PATH = path.resolve(APP_PATH, 'router');
-const STORE_PATH = path.resolve(APP_PATH, 'store');
-const UTILS_PATH = path.resolve(APP_PATH, 'lib/utils');
-const API_PATH = path.resolve(APP_PATH, 'lib/api');
-const IMAGES_PATH = path.resolve(APP_PATH, 'assets/images');
-const STYLES_PATH = path.resolve(APP_PATH, 'assets/styles');
+const COMPONENTS_PATH = path.resolve(APP_PATH, "components");
+const VIEWS_PATH = path.resolve(APP_PATH, "views");
+const ROUTER_PATH = path.resolve(APP_PATH, "router");
+const STORE_PATH = path.resolve(APP_PATH, "store");
+const UTILS_PATH = path.resolve(APP_PATH, "lib/utils");
+const API_PATH = path.resolve(APP_PATH, "lib/api");
+const IMAGES_PATH = path.resolve(APP_PATH, "assets/images");
+const STYLES_PATH = path.resolve(APP_PATH, "assets/styles");
+const FAVICON_PATH =path.resolve(IMAGES_PATH, "favicon.png");
 
 const getLocalIPv4 = () => {
-  const os = require('os');
+  const os = require("os");
   const interfaces = os.networkInterfaces();
   let details;
   for (let key in interfaces) {
     for (let i = 0; i < interfaces[key].length; i++) {
       details = interfaces[key][i];
-      if (details.family === 'IPv4' && (key === 'en0' || key === 'eth0' || key === '以太网')) {
+      if (details.family === "IPv4" && (key === "en0" || key === "eth0" || key === "以太网")) {
         return details.address;
       }
     }
   }
-  return '127.0.0.1';
+  return "127.0.0.1";
 };
 
 const getPort = () => {
   let port = 8080;
   process.argv.forEach((argv, idx, argvs) => {
-    if (argv === '--port') {
+    if (argv === "--port") {
       port = Number(argvs[idx + 1]) ? argvs[idx + 1] : port;
     }
   });
@@ -48,9 +51,9 @@ const commonConfig = {
   //页面入口文件配置
   entry: {
     commons: [
-      'vue',
-      'vue-router',
-      'vuex'
+      "vue",
+      "vue-router",
+      "vuex"
     ],
     app: [
       APP_FILE
@@ -58,104 +61,118 @@ const commonConfig = {
   },
   //入口文件输出配置
   output: {
-    publicPath: '/', //编译好的文件，在服务器的路径,这是静态资源引用路径
+    publicPath: "/", //编译好的文件，在服务器的路径,这是静态资源引用路径
     path: BUILD_PATH, //发布文件地址
-    filename: '[name].[hash].js', //编译后的文件名字
-    chunkFilename: '[name].[hash].js'
+    filename: "[name].[hash].js", //编译后的文件名字
+    chunkFilename: "[name].[hash].js"
   },
   //配置文件模块解析
   module: {
     rules: [{
-        test: /\.vue$/,
-        use: [{
-          loader: 'vue-loader',
-          options: {}
-        }]
-      },
-      {
-        test: /\.js$/,
-        use: ['babel-loader'],
-        include: [APP_PATH],
-        exclude: /node_modules/
-      },
-      {
-        test: /\.css$/,
-        use: process.env.NODE_ENV === 'production' ?
-          ExtractTextPlugin.extract({
-            fallback: 'style-loader/url',
-            use: [{
-              loader: 'css-loader',
-              options: {
-                sourceMap: false,
-                modules: false, // css modules
-                importLoaders: 1,
-                localIdentName: '[local]-[hash:base64:8]'
-              }
-            }, 'postcss-loader'],
-            publicPath: 'dist'
-          }) : ['style-loader', {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-              modules: false,
-              importLoaders: 1,
-              localIdentName: '[local]-[hash:base64:8]'
-            }
-          }, 'postcss-loader'],
-        include: [APP_PATH]
-      },
-      {
-        test: /\.less$/,
-        use: process.env.NODE_ENV === 'production' ?
-          ExtractTextPlugin.extract({
-            fallback: 'style-loader/url',
-            use: [{
-              loader: 'css-loader',
-              options: {
-                sourceMap: false, //生成样式表link,添加到html head中
-                modules: false, // css modules
-                importLoaders: 1,
-                localIdentName: '[local]-[hash:base64:8]'
-              }
-            }, 'postcss-loader', 'less-loader'],
-            publicPath: 'dist'
-          }) : ['style-loader', {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-              modules: false,
-              importLoaders: 1,
-              localIdentName: '[local]-[hash:base64:8]'
-            }
-          }, 'postcss-loader', 'less-loader'],
-        include: [APP_PATH]
-      },
-      {
-        test: /\.(png|jpg|gif|jpeg|svg)$/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 8192,
-            name: `images/[hash:8].[name].[ext]`
+      enforce: "pre",
+      test: /\.vue$/,
+      loader: "eslint-loader",
+      exclude: /node_modules/
+    },
+    {
+      test: /\.vue$/,
+      use: [{
+        loader: "vue-loader",
+        options: {
+          extract: isProduction,
+          transformToRequire: {
+            video: "src",
+            source: "src",
+            img: "src",
+            image: "xlink:href"
           }
-        }],
-        exclude: /^node_modules$/
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf)$/,
-        use: [{
-          loader: 'url-loader',
+        }
+      }]
+    },
+    {
+      test: /\.js$/,
+      use: ["babel-loader", "eslint-loader"],
+      include: [APP_PATH],
+      exclude: /node_modules/
+    },
+    {
+      test: /\.css$/,
+      use: isProduction ?
+        ExtractTextPlugin.extract({
+          fallback: "style-loader/url",
+          use: [{
+            loader: "css-loader",
+            options: {
+              sourceMap: false,
+              modules: false, // css modules
+              importLoaders: 1,
+              localIdentName: "[local]-[hash:base64:8]"
+            }
+          }, "postcss-loader"],
+          publicPath: "dist"
+        }) : ["style-loader", {
+          loader: "css-loader",
           options: {
-            limit: 100000,
-            name: `fonts/[name].[ext]`
+            sourceMap: true,
+            modules: false,
+            importLoaders: 1,
+            localIdentName: "[local]-[hash:base64:8]"
           }
-        }]
-      },
-      {
-        test: /\.html$/,
-        use: ['html-loader'],
-        include: [APP_PATH]
-      }
+        }, "postcss-loader"]
+      // include: [APP_PATH]
+    },
+    {
+      test: /\.less$/,
+      use: isProduction ?
+        ExtractTextPlugin.extract({
+          fallback: "style-loader/url",
+          use: [{
+            loader: "css-loader",
+            options: {
+              sourceMap: false, //生成样式表link,添加到html head中
+              modules: false, // css modules
+              importLoaders: 1,
+              localIdentName: "[local]-[hash:base64:8]"
+            }
+          }, "postcss-loader", "less-loader"],
+          publicPath: "dist"
+        }) : ["style-loader", {
+          loader: "css-loader",
+          options: {
+            sourceMap: true,
+            modules: false,
+            importLoaders: 1,
+            localIdentName: "[local]-[hash:base64:8]"
+          }
+        }, "postcss-loader", "less-loader"]
+      // include: [APP_PATH]
+    },
+    {
+      test: /\.(png|jpg|gif|jpeg|svg)$/,
+      use: [{
+        loader: "url-loader",
+        options: {
+          limit: 8192,
+          name: `images/[hash:8].[name].[ext]`
+        }
+      }],
+      exclude: /^node_modules$/
+    },
+    {
+      test: /\.(woff|woff2|eot|ttf)$/,
+      use: [{
+        loader: "url-loader",
+        options: {
+          limit: 100000,
+          name: `fonts/[name].[ext]`
+        }
+      }]
+    },
+    {
+      test: /\.html$/,
+      use: ["html-loader"],
+      include: [APP_PATH]
+    }
     ]
   },
 
@@ -166,8 +183,8 @@ const commonConfig = {
 
   resolve: {
     alias: { // 配置目录别名
-      'vue$': 'vue/dist/vue.esm.js',
-      '@': APP_PATH,
+      "vue$": "vue/dist/vue.esm.js",
+      "@": APP_PATH,
       components: COMPONENTS_PATH,
       router: ROUTER_PATH,
       views: VIEWS_PATH,
@@ -178,36 +195,36 @@ const commonConfig = {
       images: IMAGES_PATH
     },
     // 引用js、vue、less、css文件可以省略后缀名
-    extensions: ['.js', '.vue', '.less', '.css']
+    extensions: [".js", ".vue", ".less", ".css"]
   },
 
-  target: 'web',
+  target: "web",
 
   //插件
   plugins: [
     new webpack.ProvidePlugin({
-      'vue': 'vue',
-      'vue-router': 'vue-router',
-      'vuex': 'vuex'
+      "vue": "vue",
+      "vue-router": "vue-router",
+      "vuex": "vuex"
     }),
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(["dist"]),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'commons',
+      name: "commons",
       minChunks: Infinity
     }),
     //生成HTML文件
     new HtmlWebpackPlugin({
-      title: 'app',
-      template: './index.html',
-      chunksSortMode: 'dependency',
-      favicon: 'src/assets/images/favicon.png', //配置favicon
+      title: "app",
+      template: "./index.html",
+      chunksSortMode: "dependency",
+      favicon: FAVICON_PATH, //配置favicon
       inject: true
-    }),
+    })
   ]
 };
 
-module.exports = Merge(commonConfig, process.env.NODE_ENV === 'production' ? {
+module.exports = Merge(commonConfig, isProduction ? {
   // devtool: 'source-map',
   output: {
     filename: `js/${commonConfig.output.filename}`,
@@ -227,7 +244,7 @@ module.exports = Merge(commonConfig, process.env.NODE_ENV === 'production' ? {
       comments: false,
       compress: {
         warnings: false,
-        'drop_console': true
+        "drop_console": true
       }
     }),
     //加载器最小化
@@ -238,27 +255,27 @@ module.exports = Merge(commonConfig, process.env.NODE_ENV === 'production' ? {
     }),
     //生成文件顶部加入注释
     new webpack.BannerPlugin({
-      banner: 'This file is created by eagleagle, ' + new Date(),
+      banner: "This file is created by eagleagle, " + new Date(),
       raw: false,
       entryOnly: true
-    }),
+    })
 
   ]
 } : {
-  devtool: 'inline-source-map',
+  devtool: "inline-source-map",
   devServer: {
     proxy: { // proxy URLs to backend development server
-      '/api': {
-        target: 'http://localhost:3000',
+      "/api": {
+        target: "http://localhost:3000",
         changeOrigin: true
         // pathRewrite: { '^/api': '' }
       },
-      '/images': {
-        target: 'http://localhost:3000',
+      "/images": {
+        target: "http://localhost:3000",
         changeOrigin: true
       }
     },
-    host: '0.0.0.0',
+    host: "0.0.0.0",
     public: `${ getLocalIPv4() }:${ getPort() }`, //允许其它主机访问
     port: getPort(),
     disableHostCheck: true,

@@ -1,16 +1,23 @@
-import Vue from 'vue';
-// import ElementUI from 'element-ui';
-import router from 'router/';
-import store from 'store/';
-import app from 'views/layout/';
+import Vue from "vue";
+import {
+  Tabs,
+  TabPane
+} from "element-ui";
+import router from "router/";
+import store from "store/";
+import app from "views/layout/";
 
-// import 'element-ui/lib/theme-default/index.css';
+import "styles/init.less";
+import "styles/fonts.less";
+import "styles/global.less";
+import "element-ui/lib/theme-chalk/index.css";
 
-// Vue.use(ElementUI);
+Vue.component(Tabs.name, Tabs);
+Vue.component(TabPane.name, TabPane);
 
 new Vue({
-  el: '#app',
+  el: "#app",
   render: h => h(app),
   router,
   store
-})
+});

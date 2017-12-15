@@ -1,3 +1,3 @@
 export default {
-    queryCounter: state => state.counter
-}
+  queryCounter: state => state.counter
+};
