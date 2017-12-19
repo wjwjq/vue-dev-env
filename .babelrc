@@ -1,20 +1,37 @@
 {
   "presets": [
-    ["es2015", {
-      "modules": false
-    }], "stage-0"
+    [
+      "env",
+      {
+        "modules": false,
+        "targets": {
+          "browsers": [
+            "> 1%",
+            "last 2 versions",
+            "not ie <= 8"
+          ]
+        }
+      }
+    ],
+    "stage-0"
   ],
   "plugins": [
-    ["transform-runtime", {
-      "helpers": false,
-      "polyfill": false,
-      "regenerator": true,
-      "moduleName": "babel-runtime"
-    }],
-    ["component", {
-      "libraryName": "element-ui",
-      "styleLibraryName": "theme-chalk"
-    }],
+    [
+      "transform-runtime",
+      {
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
+      }
+    ],
+    [
+      "component",
+      {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-chalk"
+      }
+    ],
     "transform-regenerator",
     "transform-object-rest-spread",
     "transform-decorators-legacy"
