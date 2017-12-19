@@ -21,7 +21,7 @@
         <div style="border: 1px solid #eee; padding: 15px;">
             <h3>简单 vuex 应用</h3>
             <br>
-            <counter />
+            <Counter />
         </div>
     
         <br>
@@ -41,10 +41,11 @@
     </div>
 </template>
 <script>
-import counter from "components/counter";
+import Counter from "components/Counter";
 export default {
+  name: "Home",
   components: {
-    counter
+    Counter
   },
   data() {
     return {

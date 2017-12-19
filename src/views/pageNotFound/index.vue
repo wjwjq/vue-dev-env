@@ -23,6 +23,7 @@ import errorImg from "images/404.png";
 import "./index.less";
 
 export default {
+  name: "PageNotFount",
   data() {
     return {
       count: 10,

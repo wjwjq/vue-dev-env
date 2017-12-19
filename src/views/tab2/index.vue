@@ -4,6 +4,7 @@
 
 <script>
 export default {
+  name: "Tab2",
   data() {
     return {
       message: "页面2"

@@ -29,6 +29,7 @@ button {
 import { mapState, mapActions, mapGetters } from "vuex";
 import * as counter from "store/counter/constant";
 export default {
+  name: "Counter",
   data() {
     return {
       counterMsg: ""

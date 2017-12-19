@@ -23,6 +23,7 @@ import errorImg from "images/403.png";
 import "./index.less";
 
 export default {
+  name: "PageForbidden",
   data() {
     return {
       count: 10,
