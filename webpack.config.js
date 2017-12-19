@@ -22,6 +22,8 @@ const IMAGES_PATH = path.resolve(APP_PATH, "assets/images"); //图片目录
 const STYLES_PATH = path.resolve(APP_PATH, "assets/styles"); //样式目录
 const FAVICON_PATH = path.resolve(IMAGES_PATH, "favicon.png"); //favicon目录
 
+const ASSETS_SUB_PATH = "staic";
+
 const PROXY_URI = "http://localhost:3000"; //反向代理地址
 
 const getLocalIPv4 = () => {
@@ -153,7 +155,7 @@ const commonConfig = {
         loader: "url-loader",
         options: {
           limit: 8192,
-          name: `static/images/[hash:8].[name].[ext]`
+          name: `${ASSETS_SUB_PATH}/images/[hash:8].[name].[ext]`
         }
       }],
       exclude: /^node_modules$/
@@ -164,7 +166,7 @@ const commonConfig = {
         loader: "url-loader",
         options: {
           limit: 100000,
-          name: `static/fonts/[name].[ext]`
+          name: `${ASSETS_SUB_PATH}/fonts/[name].[ext]`
         }
       }]
     },
@@ -227,14 +229,14 @@ const commonConfig = {
 module.exports = merge(commonConfig, isProduction ? {
   // devtool: 'source-map',
   output: {
-    filename: `static/js/${commonConfig.output.filename}`,
-    chunkFilename: `static/js/[name].[hash].js`
+    filename: `${ASSETS_SUB_PATH}/js/${commonConfig.output.filename}`,
+    chunkFilename: `${ASSETS_SUB_PATH}/js/[name].[hash].js`
   },
   //插件项
   plugins: [
     //CSS文件单独打包
     new ExtractTextPlugin({
-      filename: `static/css/style.css`,
+      filename: `${ASSETS_SUB_PATH}/css/style.css`,
       disable: false,
       allChunks: true
     }),
@@ -264,11 +266,10 @@ module.exports = merge(commonConfig, isProduction ? {
 } : {
   devtool: "inline-source-map",
   devServer: {
-    proxy: { // proxy URLs to backend development server
+    proxy: {
       "/api": {
         target: PROXY_URI,
         changeOrigin: true
-        // pathRewrite: { '^/api': '' }
       }
     },
     host: "0.0.0.0",
@@ -276,11 +277,11 @@ module.exports = merge(commonConfig, isProduction ? {
     port: getPort(),
     disableHostCheck: true,
     allowedHosts: [],
-    compress: true, // enable gzip compression
-    historyApiFallback: true, // true for index.html upon 404, object for multiple paths
-    hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
-    https: false, // true for self-signed, object for cert authority
-    noInfo: false, // only errors & warns on hot reload
+    compress: true,
+    historyApiFallback: true,
+    hot: true,
+    https: false,
+    noInfo: false,
     open: true,
     watchOptions: {
       poll: true

@@ -1,18 +1,8 @@
 import axios from "axios";
 import store from "store/";
-import {
-  AUTH_FAIL,
-  SIGN_OUT
-} from "store/user/constant";
+import { AUTH_FAIL } from "store/user/constant";
 
 import qs from "qs";
-
-import {
-  request
-} from "http";
-import {
-  error
-} from "util";
 
 const instance = axios.create();
 
@@ -112,19 +102,18 @@ const del = (url, postData) => networkCall(instance(url, {
   data: postData
 }));
 
-const dealAll = requestArrayList => {};
+// const dealAll = requestArrayList => {};
 
-async function all(requestArrayList) {
-  console.info("requestArrayList", requestArrayList);
-  let result = [];
-  let r;
-  try {
-    await requestArrayList.map(requestPromise => requestPromise.then(resData => result.push(resData)).catch(error => console.info(error)));
-    console.info(result);
-  } catch (error) {
-    console.info("axios all error", error);
-  }
-}
+// async function all(requestArrayList) {
+//   console.info("requestArrayList", requestArrayList);
+//   let result = [];
+//   try {
+//     await requestArrayList.map(requestPromise => requestPromise.then(resData => result.push(resData)).catch(error => console.info(error)));
+//     console.info(result);
+//   } catch (error) {
+//     console.info("axios all error", error);
+//   }
+// }
 
 export default {
   delete: del,
