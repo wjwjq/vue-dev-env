@@ -122,6 +122,10 @@
       "warn",
       4
     ],
+    "vue/attribute-hyphenation": [
+      "error",
+      "always"
+    ],
     "vue/html-self-closing": [
       "error"
     ],
@@ -135,6 +139,9 @@
       "error"
     ],
     "vue/order-in-components": [
+      "warn"
+    ],
+    "vue/no-confusing-v-for-v-if": [
       "warn"
     ],
     "vue/max-attributes-per-line": [
