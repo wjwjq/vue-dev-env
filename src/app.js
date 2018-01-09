@@ -7,9 +7,7 @@ import router from "router/";
 import store from "store/";
 import app from "views/layout/";
 
-import "styles/init.less";
-import "styles/fonts.less";
-import "styles/global.less";
+import "styles/";
 
 Vue.component(Tabs.name, Tabs);
 Vue.component(TabPane.name, TabPane);
