@@ -83,7 +83,32 @@ const commonConfig = {
       use: [{
         loader: "vue-loader",
         options: {
-          extract: isProduction,
+           loaders: {
+              css: ExtractTextPlugin.extract({
+                fallback: "vue-style-loader",
+                use: [{
+                  loader: "css-loader",
+                  options: {
+                    sourceMap: false,
+                    modules: false, // css modules
+                    importLoaders: true,
+                    localIdentName: "[name].[hash:5]"
+                  }
+                }, "postcss-loader"]
+              }),
+              less: ExtractTextPlugin.extract({
+                fallback: "vue-style-loader",
+                use: [{
+                  loader: "css-loader",
+                  options: {
+                    sourceMap: false,
+                    modules: false, // css modules
+                    importLoaders: true,
+                    localIdentName: "[name].[hash:5]"
+                  }
+                }, "postcss-loader", "less-loader"]
+              })
+           },
           transformToRequire: {
             video: "src",
             source: "src",
