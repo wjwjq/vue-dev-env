@@ -1,58 +1,90 @@
 <template>
-    <div style="padding: 30px;">
-        <h1>{{ message }}</h1>
-
-        <br>
-        <div style="border: 1px solid #eee; padding: 15px;">
-            <h3>vue router 应用</h3>
-            <br>
-            <ul>
-                <li
-                    style="font-size: 16px; line-height: 2; display: inline-block; width: 60px; text-aligin: center;"
-                    v-for="(tab, idx) in tabs"
-                    :key="idx">
-                    <router-link :to="`/${tab}`">{{ tab }}</router-link>
-                </li>
-            </ul>
+    <div class="home">
+        <div 
+            ref="mainHeader"
+            :style="{height: headerHeight + 'px'}" 
+            class="main-header" >
+            <main-nav />
         </div>
-    
-        <br>
-    
-        <div style="border: 1px solid #eee; padding: 15px;">
-            <h3>简单 vuex 应用</h3>
-            <br>
-            <Counter />
-        </div>
-    
-        <br>
-
-        <div style="border: 1px solid #eee; padding: 15px;">
-            <h3>element UI 应用</h3>
-            <el-tabs v-model="activeName">
-                <el-tab-pane 
-                    v-for="(tab,idx) in tabs"
-                    :key="idx"
-                    :label="tab" 
-                    :name="tab">
-                    {{ tab }}
-                </el-tab-pane>
-            </el-tabs>
+        
+        <div 
+            :style="{height: bodyHeight + 'px'}"
+            class="main-body">
+            <keep-alive>
+                <router-view />
+            </keep-alive>
         </div>
     </div>
+    
 </template>
+
 <script>
-import Counter from "components/Counter";
+import MainNav from "components/Nav";
+
 export default {
-  name: "Home",
+  name: "Layout",
+
   components: {
-    Counter
+    "main-nav": MainNav
   },
+
+  props: {
+    height: {
+      default: 0,
+      type: Number
+    }
+  },
+
   data() {
     return {
-      message: "首页",
-      activeName: "tab1",
-      tabs: ["tab1", "tab2"]
+      headerHeight: 120,
+      bodyHeight: 0
     };
+  },
+
+
+  watch: {
+    $route(nv, ov) {
+      if (nv.path !== ov.path) {
+        this.setHeight();
+      }
+    }
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      this.setHeight();
+
+      document.addEventListener("webkitfullscreenchange", this.onFullcreenChange);
+
+      document.addEventListener("keydown", this.onF11Keydown );
+    });
+  },
+  
+  beforeDestroy() {
+    document.removeEventListener("webkitfullscreenchange", this.onFullscreenChange);
+    document.removeEventListener("keydown", this.onF11Keydown);
+  },
+
+  methods: {
+    onFullscreenChange() {
+      this.setHeightDealy();
+    },
+    
+    onF11Keydown(e) {
+      if (e.keyCode === 122) {
+        this.setHeightDealy();
+      }
+    },
+
+    setHeightDealy() {
+      window.setTimeout(() => this.setHeight(), 300);
+    },
+
+    setHeight() {
+      this.headerHeight = this.$route.path === "/" ? 120 : 180;
+      this.bodyHeight = document.documentElement.clientHeight - this.headerHeight; //this.$refs.mainHeader.clientHeight;
+    }
   }
 };
 </script>

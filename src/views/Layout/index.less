@@ -1,0 +1,66 @@
+.layout {
+  position: relative;
+  height: 100%;
+  background: url("../../assets/images/main_bg.jpg");
+  overflow: hidden;
+
+  .main-header {
+    height: 180px;
+  }
+
+  .main-body {
+    position: relative;
+  }
+
+  &:full-screen {
+    width: 100%;
+    height: 100%;
+  }
+
+  &:fullscreen {
+    width: 100%;
+    height: 100%;
+  }
+
+  &:-webkit-full-screen,
+  &:-moz-full-screen {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.arc {
+  position: absolute;
+  width: 41px;
+  height: 38px;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  &-bottom {
+   &-left {
+      bottom: 14px;
+      left: 12px;
+      background-image: url(../../assets/images/arc_bottom_left.png);
+    }
+
+    &-right {
+      bottom: 14px;
+      right: 12px;
+      background-image: url(../../assets/images/arc_bottom_right.png);
+    }
+  }
+
+  &-top {
+   &-left {
+      top: 14px;
+      left: 12px;
+      background-image: url(../../assets/images/arc_top_left.png);
+    }
+
+    &-right {
+      top: 14px;
+      right: 12px;
+      background-image: url(../../assets/images/arc_top_right.png);
+    }
+  }
+}

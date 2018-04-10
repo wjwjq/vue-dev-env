@@ -1,0 +1,41 @@
+.charts {
+  position: relative;
+  width: 100%;
+  height: 800px;
+  background-color: white;
+  .funnel {
+    margin-top: 44px;
+    width: 20%;
+    height: 192px;
+    float: left;
+  }
+  .table {
+    width: 80%;
+    float: left;
+    .el-table {
+      .el-table__header-wrapper th,
+      .el-table__body-wrapper td {
+        height: 44px !important;
+      }
+    }
+  }
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+  .floatBox {
+    width: 100%;
+    position: absolute;
+    top: 44px;
+    left: 0;
+    .default-class {
+      height: 44px;
+      background-color: inherit;
+      text-align: center;
+    }
+    .active-class {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+}

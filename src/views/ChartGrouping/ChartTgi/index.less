@@ -1,0 +1,174 @@
+.tgi-chart {
+  margin: 20px 0 0 37px;
+  padding: 41px 30px 24px 28px;
+  background: url('../../../assets/images/box.png') no-repeat;
+  width: 1846px;
+  height: 839px;
+  overflow: hidden;
+
+  &-left,
+  &-right {
+    float: left;
+    height: 766px;
+  }
+
+  &-left {
+    position: relative;
+    width: 1151px;
+    margin-right: 29px;
+    padding: 85px 30px 0 0;
+    background: url("../../../assets/images/chart_tgi_left_bg.png");
+
+    &-wrap {
+      overflow: hidden;
+    }
+  }
+
+  &-right {
+    position: relative;
+    width: 600px;
+    padding: 82px 50px 0 58px;
+    overflow: hidden;
+    background: url("../../../assets/images/chart_tgi_right_bg.png");
+  }
+
+  &-title {
+    position: absolute;
+    top: 22px;
+    left: 30px;
+    font-size: 20px;
+    color: #28dcff;
+    letter-spacing: 5px;
+    display: inline-block;
+
+    &::after {
+      position: absolute;
+      right: -23px;
+      bottom: -1px;
+      width: 12px;
+      height: 12px;
+      content: '';
+      border-width: 1px;
+      border-style: solid;
+      border-color: transparent #16dbfe #16dbfe transparent;
+    }
+  }
+
+  .list {
+    position: absolute;
+    top: 120px;
+    right: 42px;
+
+    li {
+      border: 1px dashed #049cf4;
+      text-align: center;
+      font-size: 14px;
+      width: 195px;
+      margin-bottom: 32px;
+      border-radius: 10px;
+      padding: 12px 0 9px;
+
+      img {
+        display: block;
+        width: 36px;
+        height: 40px;
+        margin: 0 auto 6px;
+      }
+
+      p {
+        color: #fff;
+        font-size: 14px;
+        line-height: 1;
+      }
+    }
+  }
+
+  .chart {
+    &-wrapper {
+      position: relative;
+      height: 678px;
+      width: 840px;
+    }
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 840px;
+    height: 678px;
+    &-back{
+      z-index: 0;
+    }
+    &-front{
+      z-index: 1;
+    }
+  }
+
+  .right-list {
+    position: relative;
+    width: 491px;
+    height: 684px;
+    background: url('../../../assets/images/chart_tgi_tree.png') center no-repeat;
+
+    li {
+      position: absolute;
+
+      &::before {
+        position: absolute;
+        top: 5px;
+        left: 4px;
+        content: '';
+        width: 210px;
+        height: 86px;
+        border: 1px solid #006cc8;
+        z-index: 0;
+      }
+
+      &:first-child {
+        top: 54px;
+        left: 0;
+      }
+
+      &:nth-child(2) {
+        top: 145px;
+        right: 0;
+      }
+
+      &:nth-child(3) {
+        top: 221px;
+        left: 0;
+      }
+
+      &:nth-child(4) {
+        top: 320px;
+        right: 0;
+      }
+
+      &:nth-child(5) {
+        top: 435px;
+        left: 0;
+      }
+
+      div {
+        position: relative;
+        z-index: 1;
+        width: 210px;
+        height: 86px;
+        background-color: #006cc8;
+        padding: 15px 30px 0 10px;
+      }
+
+      h4 {
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 26px;
+        color: #fff;
+      }
+
+      p {
+        line-height: 30px;
+        font-size: 20px;
+        color: #ffc600;
+        text-align: right;
+      }
+    }
+  }
+}

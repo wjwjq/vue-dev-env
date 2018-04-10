@@ -1,0 +1,160 @@
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.heatmap-marker {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+.amap-info-content {
+  background-color: rgba(0, 0, 0, .55);
+}
+
+.amap-info-close {
+  display: none;
+}
+
+.amap-info-sharp {
+}
+
+.heatmap-marker-over {
+  color: #fff;
+}
+
+@-webkit-keyframes warn {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes warn {
+  0% {
+    -moz-transform: scale(0);
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    -moz-transform: scale(1);
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@-o-keyframes warn {
+  0% {
+    -o-transform: scale(0);
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    -o-transform: scale(1);
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes warn {
+  0% {
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -o-transform: scale(0);
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.area-box .dot {
+  position: absolute;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background: #a2a9b4;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+.area-box .pulse {
+  position: absolute;
+  top: -28px;
+  left: -28px;
+  height: 66px;
+  width: 66px;
+  border: 2px solid #b7b7b7;
+  -webkit-border-radius: 48px;
+  -moz-border-radius: 48px;
+  border-radius: 48px;
+  -webkit-box-shadow: 0 0 4px #82878f, 0 0 10px #82878f inset;
+  -moz-box-shadow: 0 0 4px #82878f, 0 0 10px #82878f inset;
+  box-shadow: 0 0 4px #82878f, 0 0 10px #82878f inset;
+  opacity: .12;
+  filter: alpha(opacity=0);
+  -webkit-animation: warn 2s ease-out both;
+  -moz-animation: warn 2s ease-out both;
+  -o-animation: warn 2s ease-out both;
+  animation: warn 2s ease-out both;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  background: 0 0;
+}
+
+.area-box .delay-01 {
+  -webkit-animation-delay: .8s;
+  -moz-animation-delay: .8s;
+  -o-animation-delay: .8s;
+  animation-delay: .8s;
+}
+
+.area-box .delay-02 {
+  -webkit-animation-delay: .8s;
+  -moz-animation-delay: .8s;
+  -o-animation-delay: .8s;
+  animation-delay: .8s;
+}
+
+.area-box .delay-03 {
+  -webkit-animation-delay: 1.2s;
+  -moz-animation-delay: 1.2s;
+  -o-animation-delay: 1.2s;
+  animation-delay: 1.2s;
+}
+
+.area-box.active .dot {
+  background: purple;
+}
+
+.area-box.active .pulse {
+  border-color: purple;
+  top: -32px;
+  left: -32px;
+  height: 88px;
+  width: 88px;
+  -webkit-box-shadow: 0 0 12px purple, 0 0 20px purple inset;
+  -moz-box-shadow: 0 0 12px purple, 0 0 20px purple inset;
+  box-shadow: 0 0 12px purple, 0 0 20px purple inset;
+}

@@ -1,25 +1,138 @@
-import Home from "views/Home";
+// import Home from "views/Home";
+
+const Main = () => import(/* webpackChunkName: "Main" */ "views/Main");
 
 //按需引入
-const PageForbidden = () => import(/* webpackChunkName: "pageForbidden" */ "views/PageForbidden/");
-const PageNotFound = () => import(/* webpackChunkName: "pageNotFound" */ "views/PageNotFound/");
+const PageForbidden = () => import(/* webpackChunkName: "PageForbidden" */ "views/PageForbidden/");
+const PageNotFound = () => import(/* webpackChunkName: "PageNotFound" */ "views/PageNotFound/");
 
-const Tab1 = () => import(/* webpackChunkName: "tab1" */ "views/Tab1");
-const Tab2 = () => import(/* webpackChunkName: "tab2" */ "views/Tab2");
+const RoadMap = () => import(/* webpackChunkName: "RoadMap" */ "views/RoadMap");
+const HeatMap = () => import(/* webpackChunkName: "HeatMap" */ "views/HeatMap");
+const MigrationMap = () => import(/* webpackChunkName: "MigrationMap" */ "views/MigrationMap");
+
+/**迁徙图 - 刘宇来 */
+const MigrateMap = () => import(/* webpackChunkName: "MigrateMap" */ "views/MigrateMap");
+const DistrictHeatMap = () => import(/* webpackChunkName: "DistrictHeatMap" */ "views/DistrictHeatMap");
+
+/**漏斗图表分组联动*/
+const FunnelChart = () => import(/* webpackChunkName: "FunnelChart" */ "views/ChartGrouping/FunnelChart");
+/**TGI 表*/
+const ChartTgi = () => import(/* webpackChunkName: "ChartTgi" */ "views/ChartGrouping/ChartTgi");
+const TGI = () => import(/* webpackChunkName: "TGI" */ "views/ChartGrouping/TGI");
+
+/**图表-消费能力水平*/
+const ConsumptionLevel = () => import(/* webpackChunkName: "ConsumptionLevel" */ "views/ConsumptionLevel");
+/**图表-家庭结构*/
+const FamilyStructure = () => import(/* webpackChunkName: "ConsumptionLevel" */ "views/FamilyStructure");
+
+/**版块管理 */
+const AreaManage = () => import(/* webpackChunkName: "AreaManage" */ "views/AreaManage");
+
+const IncomeStatistics = () => import(/* webpackChunkName: "IncomeStatistics" */ "views/IncomeStatistics");
+
+const Login = () => import(/* webpackChunkName: "AreaManage" */ "views/Login");
 
 const mainRoutes = [
   {
-    path: "/", 
+    path: "/login",
+    name: "login",
+    component: Login
+  },
+  {
+    path: "/",
     name: "home",
-    component: Home
-  },{
-    path: "/tab1",
-    name: "tab1",
-    component: Tab1
-  },{
-    path: "/tab2",
-    name: "tab2",
-    component: Tab2
+    component: Main
+  },
+  {
+    path: "/main",
+    name: "main",
+    component: Main
+  },
+  {
+    path: "/roadmap",
+    name: "roadmap",
+    component: RoadMap
+  },
+  {
+    path: "/heatmap",
+    name: "heatmap",
+    component: HeatMap
+  },
+  {
+    path: "/districtHeatmap",
+    name: "districtHeatmap",
+    component: DistrictHeatMap
+  },
+  {
+    path: "/roadmap/:id",
+    name: "roadmapid",
+    component: RoadMap
+  },
+  {
+    path: "/heatmap/:id",
+    name: "heatmapid",
+    component: HeatMap
+  },
+  {
+    path: "/districtHeatmap/:id",
+    name: "districtHeatmapid",
+    component: DistrictHeatMap
+  },
+
+  {
+    path: "/migrationMap",
+    name: "migrationMap",
+    component: MigrationMap
+  },
+
+  /**迁徙图 - 刘宇来 */
+  {
+    path: "/migrate-map",
+    name: "migrate-map",
+    component: MigrateMap
+  },
+
+  /**图表分组联动  */
+  {
+    path: "/funnelChart",
+    name: "funnelChart",
+    component: FunnelChart
+  },
+  /**图表-tgi值  */
+  {
+    path: "/chartTgi",
+    name: "chartTgi",
+    component: ChartTgi
+  },
+  /**图表-tgi值  */
+  {
+    path: "/tgi",
+    name: "tgi",
+    component: TGI
+  },
+  /**图表-消费能力水平  */
+  {
+    path: "/consumptionLevel",
+    name: "consumptionLevel",
+    component: ConsumptionLevel
+  },
+  /**图表-消费能力水平  */
+  {
+    path: "/familyStructure",
+    name: "familyStructure",
+    component: FamilyStructure
+  },
+  {
+    path: "/income-statistics",
+    name: "income-statistics",
+    component: IncomeStatistics
+  },
+
+  /**版块管理 */
+  {
+    path: "/areaManage",//"/YXJlYS1tYW5hZ2U=",
+    name: "areaManage",
+    component: AreaManage
   }
 ];
 

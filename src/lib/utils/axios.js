@@ -1,6 +1,6 @@
 import axios from "axios";
 import store from "store/";
-import { AUTH_FAIL } from "store/user/constant";
+// import { AUTH_FAIL } from "store/user/constant";
 
 import qs from "qs";
 
@@ -53,9 +53,9 @@ async function networkCall(axiosPromise) {
     if (+code === 0) { //请求成功
       return await resData.data;
     } else if (+code === 403) { //验证失败
-      store.dispatch({
-        type: AUTH_FAIL
-      });
+      // store.dispatch({
+      //   type: AUTH_FAIL
+      // });
       return Promise.stop();
     } else { //请求失败
       return Promise.reject({
@@ -102,18 +102,16 @@ const del = (url, postData) => networkCall(instance(url, {
   data: postData
 }));
 
-// const dealAll = requestArrayList => {};
-
-// async function all(requestArrayList) {
-//   console.info("requestArrayList", requestArrayList);
-//   let result = [];
-//   try {
-//     await requestArrayList.map(requestPromise => requestPromise.then(resData => result.push(resData)).catch(error => console.info(error)));
-//     console.info(result);
-//   } catch (error) {
-//     console.info("axios all error", error);
-//   }
-// }
+async function all(requestArrayList) {
+  console.info("requestArrayList", requestArrayList);
+  let result = [];
+  try {
+    await requestArrayList.map(requestPromise => requestPromise.then(resData => result.push(resData)).catch(error => console.info(error)));
+    console.info(result);
+  } catch (error) {
+    console.info("axios all error", error);
+  }
+}
 
 export default {
   delete: del,

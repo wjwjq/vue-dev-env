@@ -1,0 +1,229 @@
+.heatmap-panel {
+  position: absolute;
+  right: 18px;
+  top: 50px;
+  width: 419px;
+  border-radius: 15px;
+  padding-left: 40px;
+  // border: 1px solid #f00;
+  .panel-title {
+    position: relative;
+
+    .gear {
+      position: absolute;
+      transition: .3s transform ease-in-out;
+
+      &-box {
+        position: absolute;
+        top: 0;
+        left: -40px;
+        width: 83px;
+        height: 58px;
+        background: url('../../assets/images/gear_bg.png');
+      }
+
+      &-1 {
+        top: 0;
+        left: 28px;
+        width: 20px;
+        height: 20px;
+        background: url('../../assets/images/gear_1.png');
+        animation: rotate 2s linear both infinite;
+      }
+
+      &-2 {
+        top: 18px;
+        left: 11px;
+        width: 25px;
+        height: 25px;
+        background: url('../../assets/images/gear_2.png');
+        animation: rotate 4s linear both infinite;
+      }
+
+      &-3 {
+        top: 16px;
+        left: 37px;
+        width: 38px;
+        height: 38px;
+        background: url('../../assets/images/gear_3.png');
+        animation: rotate 6s linear both infinite;
+      }
+    }
+
+    h3 {
+      font-size: 20px;
+      line-height: 54px;
+      color: #0ac1ff;
+      padding-left: 56px;
+      -webkit-text-stroke: 1px #0072c9;
+    }
+  }
+
+  .panel-box {
+    height: 728px;
+    overflow: hidden;
+    background: url('../../assets/images/heatmap_panel_bg.png') no-repeat;
+    padding: 15px 24px 13px 48px;
+
+    *::-webkit-scrollbar {
+      width: 3px;
+      height: 3px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background-color: transparent;
+    }
+
+    *::-webkit-scrollbar-track {
+      border-radius: 5px;
+      background-color: transparent;
+    }
+  }
+
+  .panel-box-scroll {
+    height: 100%;
+    overflow-y: auto;
+    border-top-left-radius: 43px 62px;
+    border-bottom-right-radius: 40px 60px;
+  }
+
+  .panel-item {
+    overflow: hidden;
+    line-height: 33px;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 15px 10px 15px 54px;
+    border-bottom: 1px solid #0c3a55;
+    transition: .3s all ease-in-out;
+
+    &:hover {
+      background: linear-gradient(to bottom, rgba(0, 130, 230, .7), rgba(0, 31, 66, .7), rgba(0, 130, 230, .7));
+
+      small {
+        background-color: #00fcff;
+      }
+
+      span,
+      i {
+        color: #00fcff;
+      }
+    }
+
+    &.active {
+      background: #10d4ec;
+    }
+
+    span,
+    i,
+    small {
+      float: left;
+      color: #fff;
+      transition: .3s all ease-in-out;
+    }
+
+    span {
+      padding-left: 50px;
+      width: calc(~"100% - 33px");
+    }
+
+    small {
+      width: 33px;
+      height: 33px;
+      line-height: 33px;
+      text-align: center;
+      font-size: 14px;
+      background-color: #0065d7;
+      border-radius: 5px;
+    }
+  }
+
+  .panel-fold {
+    position: absolute;
+    top: 300px;
+    left: 44px;
+    width: 37px;
+    height: 217px;
+    cursor: pointer;
+  }
+  transition: .3s transform ease-in-out;
+
+  &.fold {
+    transform: translateX(359px);
+    // .gear, .gear-box{
+    //   opacity: 0;
+    // }
+    .panel-fold {
+      background: url('../../assets/images/open_button.png');
+    }
+  }
+
+  &.open {
+    transform: translateX(0);
+    // .gear, .gear-box{
+    //   opacity: 1;
+    // }
+    .panel-fold {
+      background: url('../../assets/images/fold_button.png');
+    }
+  }
+}
+
+.back-top {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  color: #b6c3d6;
+  font-size: 14px;
+  z-index: 1;
+  width: 34px;
+  height: 70px;
+  text-align: center;
+  word-wrap: break-word;
+  background-color: #00438f;
+  transition: .3 all ease-in;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding-top: 15px;
+  transform: translateY(-50%);
+
+  span {
+    display: block;
+  }
+
+  &:hover {
+    background-color: #006feb;
+    color: #fff;
+  }
+}
+
+.heatmap-marker {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  color: #fff;
+  position: relative;
+  font-size: 14px;
+
+  &-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 80px;
+    text-align: center;
+
+    span {
+      display: block;
+    }
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -89,7 +89,7 @@
       }
     ],
     "no-console": [
-      "error",
+      "warn",
       {
         "allow": [
           "info",
@@ -112,7 +112,7 @@
       "error"
     ],
     "vue/jsx-uses-vars": [
-      "error"
+      "warn"
     ],
     "vue/html-quotes": [
       "error",
@@ -147,7 +147,7 @@
     "vue/max-attributes-per-line": [
       "error",
       {
-        "singleline": 1,
+        "singleline": 2,
         "multiline": {
           "max": 1,
           "allowFirstLine": false

@@ -1,0 +1,178 @@
+.main-page {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    .population-info {
+        font-size: 14px;
+        background-color: rgba(0, 11, 25, .7);
+        position: absolute;
+        top: 161px;
+        left: 76px;
+        z-index: 10;
+    }
+    .population-info-item {
+        color: #01e7fc;
+        display: inline-block;
+    }
+    .population-info-ex {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+    }
+    .population-info-ex-label {
+        margin-left: 12px;
+        font-size: 21px;
+        color: #00CAFC;
+        text-shadow: 1px 1px 2px;
+    }
+    .info-content {
+        color: #e9af00;
+    }
+    .main-sale-project {
+        padding: 20px;
+        bottom: 65px;
+        left: 47px;
+        width: 476px;
+        height: 206px;
+        position: absolute;
+        z-index: 10;
+        color: #01e7fc;
+        font-size: 14px;
+        background: url("./../../assets/images/main/main-sale-prj-bg.png") no-repeat;
+        .title {
+            position: relative;
+            font-size: 16px;
+            font-weight: 600;
+            &:after {
+                content: " ";
+                position: absolute;
+                width: 12px;
+                top: 15px;
+                height: 12px;
+                border-right: 1px solid #01e7fc;
+                border-bottom: 1px solid #01e7fc;
+            }
+        }
+        .project-content {}
+        .project-item {
+            display: inline-block;
+            width: 33%;
+            padding-top: 27px;
+            font-size: 14px;
+        }
+        .project-item-point {
+            display: inline-block;
+            vertical-align: middle;
+            background-color: #e9af00;
+            border-radius: 50%;
+            width: 11px;
+            height: 11px;
+            margin-right: 10px;
+        }
+        .project-item-label {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+    .main-info {
+        color: #efefef;
+        position: absolute;
+        right: 120px;
+        top: 150px;
+        padding: 60px 40px 30px 80px;
+        width: 559px;
+        height: 310px;
+        z-index: 10;
+        background: url("./../../assets/images/main/main-info-bg.png") no-repeat;
+        .gear {
+            position: absolute;
+            transition: .3s transform ease-in-out;
+            &-box {
+                position: absolute;
+                top: -48px;
+                left: -40px;
+                width: 83px;
+                height: 58px;
+                background: url('../../assets/images/gear_bg.png');
+            }
+            &-1 {
+                top: 0;
+                left: 28px;
+                width: 20px;
+                height: 20px;
+                background: url('../../assets/images/gear_1.png');
+                animation: rotate 2s linear both infinite;
+            }
+            &-2 {
+                top: 18px;
+                left: 11px;
+                width: 25px;
+                height: 25px;
+                background: url('../../assets/images/gear_2.png');
+                animation: rotate 4s linear both infinite;
+            }
+            &-3 {
+                top: 16px;
+                left: 37px;
+                width: 38px;
+                height: 38px;
+                background: url('../../assets/images/gear_3.png');
+                animation: rotate 6s linear both infinite;
+            }
+        }
+        &-title {
+            font-size: 18px;
+        }
+        &-item {
+            font-size: 16px;
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+        }
+        &-item-point {
+            width: 12px;
+            height: 12px;
+            background-color: #FF3840;
+            margin-right: 14px;
+        }
+    }
+}
+
+#main-page-map {
+    width: 100%;
+    height: 100%;
+    .tip-marker {
+        color: #555;
+        background-color: rgba(255, 254, 239, 0.8);
+        border: 1px solid #7E7E7E;
+        padding: 2px 6px;
+        font-size: 12px;
+        white-space: nowrap;
+        display: inline-block;
+        &:before,
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            margin: auto;
+            width: 0;
+            height: 0;
+            border: solid transparent;
+            border-width: 5px 5px;
+        }
+    }
+    .tip-marker-top {
+        transform: translate(-50%, -110%);
+        &:before,
+        &:after {
+            bottom: -9px;
+            left: 0;
+            right: 0;
+            border-top-color: rgba(255, 254, 239, 0.8);
+        }
+        &:before {
+            bottom: -10px;
+            border-top-color: #7E7E7E;
+        }
+    }
+}

@@ -1,0 +1,59 @@
+.area-manage {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: table;
+    z-index: 10;
+    #area-manage-map {
+        width: 100%;
+        height: 100%;
+    }
+    &-map {
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+        display: table-cell;
+        vertical-align: top;
+    }
+    .map-tools {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 200;
+        padding: 10px;
+        background-color: #fff;
+        border: none;
+        box-shadow: 0 1px 3px -1px #666;
+        display: flex;
+        align-items: center;
+    }
+    .tools-button {
+        margin: 0 10px;
+        padding: 5px 8px;
+        color: #fff;
+        background-color: #63b0f6;
+        cursor: pointer;
+        border-radius: 5px;
+        &:hover {
+            background-color: #73c0ff;
+        }
+    }
+    &-result {
+        display: table-cell;
+        background-color: #fff;
+        vertical-align: top;
+        width: 300px;
+        height: 100%;
+        border: 1px solid #ddd;
+        .result-content {
+            height: 100%;
+            overflow: auto;
+        }
+        .path-item {
+            padding: 5px 10px;
+        }
+        .result-content-title {
+            padding: 5px 10px;
+        }
+    }
+}
