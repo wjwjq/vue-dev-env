@@ -4,13 +4,16 @@ const merge = require("webpack-merge");
 const CleanWebpackPlugin = require("clean-webpack-plugin"); //在每次build之前，清空dist目录及其子目录
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin"); //生成index.html
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin; //包大小分析
 
-const isProduction = process.env.NODE_ENV === "production";
+const { VueLoaderPlugin } = require("vue-loader");
+
+const isProduction = process.argv.find(item => ~item.indexOf("--mode")).split("=").pop().toLowerCase() === "production";
 
 const ROOT_PATH = path.resolve(__dirname);
 const APP_PATH = path.resolve(ROOT_PATH, "src");
 const APP_FILE = path.resolve(APP_PATH, "app.js");
-const BUILD_PATH = path.join(__dirname, "build");
+const BUILD_PATH = path.join(__dirname, "dist");
 const TEMPLATE_PATH = path.resolve(ROOT_PATH, "index.html");
 const COMPONENTS_PATH = path.resolve(APP_PATH, "components");
 const VIEWS_PATH = path.resolve(APP_PATH, "views");
@@ -20,36 +23,11 @@ const UTILS_PATH = path.resolve(APP_PATH, "lib/utils");
 const API_PATH = path.resolve(APP_PATH, "lib/api");
 const IMAGES_PATH = path.resolve(APP_PATH, "assets/images"); //图片目录
 const STYLES_PATH = path.resolve(APP_PATH, "assets/styles"); //样式目录
-const FAVICON_PATH = path.resolve(IMAGES_PATH, "favicon.png"); //favicon目录
+const FAVICON_PATH = path.resolve(IMAGES_PATH, "favicon.ico"); //favicon目录
 
-const ASSETS_SUB_PATH = "staic";
+const ASSETS_SUB_PATH = "static";
 
 const PROXY_URI = "http://localhost:3000"; //反向代理地址
-
-const getLocalIPv4 = () => {
-  const os = require("os");
-  const interfaces = os.networkInterfaces();
-  let details;
-  for (let key in interfaces) {
-    for (let i = 0; i < interfaces[key].length; i++) {
-      details = interfaces[key][i];
-      if (details.family === "IPv4" && (key === "en0" || key === "eth0" || key === "以太网")) {
-        return details.address;
-      }
-    }
-  }
-  return "127.0.0.1";
-};
-
-const getPort = () => {
-  let port = 8080;
-  process.argv.forEach((argv, idx, argvs) => {
-    if (argv === "--port") {
-      port = Number(argvs[idx + 1]) ? argvs[idx + 1] : port;
-    }
-  });
-  return port;
-};
 
 const commonConfig = {
   //页面入口文件配置
@@ -72,18 +50,26 @@ const commonConfig = {
   },
   //配置文件模块解析
   module: {
-    rules: [{
-      enforce: "pre",
-      test: /\.vue$/,
-      loader: "eslint-loader",
-      exclude: /node_modules/
-    },
-    {
-      test: /\.vue$/,
-      use: [{
-        loader: "vue-loader",
-        options: {
-           loaders: {
+    rules: [
+      // {
+      //   enforce: "pre",
+      //   test: /\.vue$/,
+      //   loader: "eslint-loader",
+      //   exclude: /node_modules/
+      // },
+      {
+        test: /\.vue$/,
+        use: [{
+          loader: "vue-loader",
+          options: {
+            transformToRequire: {
+              video: "src",
+              source: "src",
+              img: "src",
+              image: "xlink:href"
+            },
+            // extract: isProduction
+            loaders: isProduction ? {
               css: ExtractTextPlugin.extract({
                 fallback: "vue-style-loader",
                 use: [{
@@ -108,104 +94,72 @@ const commonConfig = {
                   }
                 }, "postcss-loader", "less-loader"]
               })
-           },
-          transformToRequire: {
-            video: "src",
-            source: "src",
-            img: "src",
-            image: "xlink:href"
+            } : ["vue-style-loader", "css-loader", "postcss-loader", "less-loader"]
           }
-        }
-      }]
-    },
-    {
-      test: /\.js$/,
-      use: ["babel-loader", "eslint-loader"],
-      include: [APP_PATH],
-      exclude: /node_modules/
-    },
-    {
-      test: /\.css$/,
-      use: isProduction ?
-        ExtractTextPlugin.extract({
-          fallback: "style-loader/url",
-          use: [{
-            loader: "css-loader",
-            options: {
-              sourceMap: false,
-              modules: false, // css modules
-              importLoaders: 1,
-              localIdentName: "[local]-[hash:base64:8]"
-            }
-          }, "postcss-loader"]
-        }) : ["style-loader", {
-          loader: "css-loader",
+        }]
+      },
+      {
+        test: /\.js$/,
+        use: ["babel-loader", "eslint-loader"],
+        include: [APP_PATH],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: isProduction
+          ? ExtractTextPlugin.extract({
+            fallback: "vue-style-loader",
+            use: ["css-loader", "postcss-loader"]
+          })
+          : ["vue-style-loader", "css-loader", "postcss-loader"]
+        // include: [APP_PATH]
+      },
+      {
+        test: /\.less$/,
+        use: isProduction
+          ? ExtractTextPlugin.extract({
+            fallback: "vue-style-loader",
+            use: ["css-loader", "postcss-loader", "less-loader"]
+          })
+          : ["vue-style-loader", "css-loader", "postcss-loader", "less-loader"]
+        // include: [APP_PATH]
+      },
+      {
+        test: /\.(png|jpg|gif|jpeg|svg)$/,
+        use: [{
+          loader: "url-loader",
           options: {
-            sourceMap: true,
-            modules: false,
-            importLoaders: 1,
-            localIdentName: "[local]-[hash:base64:8]"
+            limit: 8192,
+            name: `${ASSETS_SUB_PATH}/images/[hash:8].[name].[ext]`
           }
-        }, "postcss-loader"]
-      // include: [APP_PATH]
-    },
-    {
-      test: /\.less$/,
-      use: isProduction ?
-        ExtractTextPlugin.extract({
-          fallback: "style-loader/url",
-          use: [{
-            loader: "css-loader",
-            options: {
-              sourceMap: false, //生成样式表link,添加到html head中
-              modules: false, // css modules
-              importLoaders: 1,
-              localIdentName: "[local]-[hash:base64:8]"
-            }
-          }, "postcss-loader", "less-loader"]
-        }) : ["style-loader", {
-          loader: "css-loader",
+        }],
+        exclude: /^node_modules$/
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf)$/,
+        use: [{
+          loader: "url-loader",
           options: {
-            sourceMap: true,
-            modules: false,
-            importLoaders: 1,
-            localIdentName: "[local]-[hash:base64:8]"
+            limit: 100000,
+            name: `${ASSETS_SUB_PATH}/fonts/[name].[ext]`
           }
-        }, "postcss-loader", "less-loader"]
-      // include: [APP_PATH]
-    },
-    {
-      test: /\.(png|jpg|gif|jpeg|svg)$/,
-      use: [{
-        loader: "url-loader",
-        options: {
-          limit: 8192,
-          name: `${ASSETS_SUB_PATH}/images/[hash:8].[name].[ext]`
-        }
-      }],
-      exclude: /^node_modules$/
-    },
-    {
-      test: /\.(woff|woff2|eot|ttf)$/,
-      use: [{
-        loader: "url-loader",
-        options: {
-          limit: 100000,
-          name: `${ASSETS_SUB_PATH}/fonts/[name].[ext]`
-        }
-      }]
-    },
-    {
-      test: /\.html$/,
-      use: ["html-loader"],
-      include: [APP_PATH]
-    }
+        }]
+      },
+      {
+        test: /\.html$/,
+        use: ["html-loader"],
+        include: [APP_PATH]
+      }
     ]
   },
 
   //引入第三方类库
   externals: {
-    //"jquery": "jQuery"
+    vue: "Vue",
+    "vue-router": "VueRouter",
+    "element-ui": "element-ui",
+    "echarts": "echarts",
+    "axios": "axios"
   },
 
   resolve: {
@@ -222,24 +176,25 @@ const commonConfig = {
       images: IMAGES_PATH
     },
     // 引用js、vue、less、css文件可以省略后缀名
-    extensions: [".js", ".vue", ".less", ".css"]
+    extensions: [".js", ".vue", ".less", ".css", "json"]
   },
 
   target: "web",
 
   //插件
   plugins: [
+    new VueLoaderPlugin(),
+
     new webpack.ProvidePlugin({
       "vue": "vue",
       "vue-router": "vue-router",
-      "vuex": "vuex"
+      "vuex": "vuex",
+      "echarts": "echarts"
     }),
     new CleanWebpackPlugin([BUILD_PATH]),
+
     new webpack.HashedModuleIdsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "commons",
-      minChunks: Infinity
-    }),
+
     //生成HTML文件
     new HtmlWebpackPlugin({
       title: "app",
@@ -247,7 +202,9 @@ const commonConfig = {
       chunksSortMode: "dependency",
       favicon: FAVICON_PATH,
       inject: true
-    })
+    }),
+
+    new webpack.LoaderOptionsPlugin({ options: {} })
   ]
 };
 
@@ -257,37 +214,44 @@ module.exports = merge(commonConfig, isProduction ? {
     filename: `${ASSETS_SUB_PATH}/js/${commonConfig.output.filename}`,
     chunkFilename: `${ASSETS_SUB_PATH}/js/[name].[hash].js`
   },
+
+  //文件压缩
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      name: "commons"
+    },
+    runtimeChunk: {
+      name: "runtime"
+    },
+    minimize: true
+  },
+
   //插件项
   plugins: [
     //CSS文件单独打包
     new ExtractTextPlugin({
-      filename: `${ASSETS_SUB_PATH}/css/style.css`,
-      disable: false,
+      filename: `${ASSETS_SUB_PATH}/css/[name].[hash:5].css`,
       allChunks: true
     }),
-    //文件压缩
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      comments: false,
-      compress: {
-        warnings: false,
-        "drop_console": true
-      }
-    }),
+
     //加载器最小化
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       context: __dirname,
       debug: false
     }),
+
     //生成文件顶部加入注释
     new webpack.BannerPlugin({
-      banner: "This file is created by eagleagle, " + new Date(),
+      banner: "This file is created by StephenWu, " + new Date(),
       raw: false,
       entryOnly: true
     })
 
+    // new BundleAnalyzerPlugin()
   ]
+
 } : {
   devtool: "inline-source-map",
   devServer: {
@@ -297,9 +261,7 @@ module.exports = merge(commonConfig, isProduction ? {
         changeOrigin: true
       }
     },
-    host: "0.0.0.0",
-    public: `${getLocalIPv4()}:${getPort()}`, //允许其它主机访问
-    port: getPort(),
+    port: 8000,
     disableHostCheck: true,
     allowedHosts: [],
     compress: true,
@@ -308,6 +270,15 @@ module.exports = merge(commonConfig, isProduction ? {
     https: false,
     noInfo: false,
     open: true,
+    clientLogLevel: "none",
+    stats: {
+      cached: false,
+      cachedAssets: false,
+      chunks: false,
+      chunkModules: false,
+      chunkOrigins: false,
+      modules: false
+    },
     watchOptions: {
       poll: true
     }
