@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/webpack-dev-server --mode=development --progress --color",
-    "start": "./node_modules/.bin/webpack-dev-server --mode=development --progress --color",
-    "build": "./node_modules/.bin/webpack --mode=production --progress --color"
+    "dev": "./node_modules/.bin/webpack-dev-server --mode=development --color",
+    "start": "npm run dev",
+    "build": "./node_modules/.bin/webpack --mode=production --color"
   },
   "author": "",
   "license": "ISC",
