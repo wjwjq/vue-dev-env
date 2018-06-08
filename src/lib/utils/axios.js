@@ -71,51 +71,52 @@ async function networkCall(axiosPromise) {
   }
 }
 
-const get = (url, params) => networkCall(instance(url, {
-  withCredentials: "include",
-  params
-}));
 
+function get(url, postData = {}) {
+  return networkCall(instance(url, {
+    params: postData
+  }));
+}
 
-const post = (url, postData) => networkCall(instance(url, {
-  method: "POST",
-  withCredentials: "include",
-  // headers: {
-  //   'Content-type': 'application/json;charset=UTF-8'
-  // },
-  data: qs.stringify(postData)
-  // data: JSON.stringify(postData)
-}));
+function post(url, postedData = {}) {
+  return networkCall(instance(url, judgePostData('POST', postedData) ));
+}
 
-const put = (url, postData) => networkCall(instance(url, {
-  method: "PUT",
-  withCredentials: "include",
-  // headers: {
-  //     'Content-type': 'application/json;charset=UTF-8'
-  // },
-  data: qs.stringify(postData)
-}));
+function put(url, postedData = {}) {
+  return networkCall(instance(url,  judgePostData('PUT', postedData) ));
+}
 
-const del = (url, postData) => networkCall(instance(url, {
-  method: "DELETE",
-  withCredentials: "include",
-  data: postData
-}));
+function del(url, postedData = {}) {
+  return networkCall(instance(url, judgePostData('DELETE', postedData) ));
+}
 
-
-async function all(axiosPromiseArray) {
+async function all(axiosPromiseAarry) {
   try {
-    return await Promise.all(axiosPromiseArry);
+    return await Promise.all(axiosPromiseAarry);
   } catch (error) {
     console.info('axios all error', error);
     return Promise.reject(error);
   }
 }
 
+function judgePostData(method, postedData) {
+  return 'data' in postedData ? {
+    method,
+    withCredentials: "include",
+    ...postedData
+  } : {
+    method,
+    withCredentials: "include",
+    data: postedData
+  };
+}
+
 export default {
-  delete: del,
   get,
   post,
   put,
+  del,
+  'delete': del,
   all
 };
+
