@@ -102,14 +102,13 @@ const del = (url, postData) => networkCall(instance(url, {
   data: postData
 }));
 
-async function all(requestArrayList) {
-  console.info("requestArrayList", requestArrayList);
-  let result = [];
+
+async function all(axiosPromiseAarry) {
   try {
-    await requestArrayList.map(requestPromise => requestPromise.then(resData => result.push(resData)).catch(error => console.info(error)));
-    console.info(result);
+    return await Promise.all(axiosPromiseAarry);
   } catch (error) {
-    console.info("axios all error", error);
+    console.info('axios all error', error);
+    return Promise.reject(error);
   }
 }
 
