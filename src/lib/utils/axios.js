@@ -8,42 +8,6 @@ const instance = axios.create();
 
 Promise.stop = () => new Promise(() => {});
 
-
-const dateFormat = date => {
-  if (!date) {
-    throw new Error(`argument 'date' is required`);
-  }
-  if (!(date instanceof Date)) {
-    date = new Date(date);
-  }
-  const o = {
-    "M+": date.getMonth() + 1, //月份
-    "d+": date.getDate(), //日
-    "h+": date.getHours(), //小时
-    "m+": date.getMinutes(), //分
-    "s+": date.getSeconds(), //秒
-    "q+": Math.floor((date.getMonth() + 3) / 3), //季度
-    "S": date.getMilliseconds() //毫秒
-  };
-  let fmt = "yyyy-MM-dd hh:mm:ss";
-  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
-  for (let k in o)
-    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-  return fmt;
-};
-
-const globalAxiosErrorHandler = errResponse => {
-  const host = window.location.origin;
-  const {
-    timestamp,
-    status,
-    error,
-    path,
-    method
-  } = errResponse;
-  console.error(`${dateFormat(timestamp)}  ${method.toUpperCase()}: ${host}${path}  ${status} (${error})`);
-};
-
 async function networkCall(axiosPromise) {
   let resData = null;
   try {
@@ -99,16 +63,59 @@ async function all(axiosPromiseAarry) {
   }
 }
 
-function judgePostData(method, postedData) {
-  return 'data' in postedData ? {
-    method,
-    withCredentials: "include",
-    ...postedData
-  } : {
-    method,
-    withCredentials: "include",
-    data: postedData
+
+fucntion dateFormat(date) {
+  if (!date) {
+    throw new Error(`argument 'date' is required`);
+  }
+  if (!(date instanceof Date)) {
+    date = new Date(date);
+  }
+  const o = {
+    "M+": date.getMonth() + 1, //月份
+    "d+": date.getDate(), //日
+    "h+": date.getHours(), //小时
+    "m+": date.getMinutes(), //分
+    "s+": date.getSeconds(), //秒
+    "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+    "S": date.getMilliseconds() //毫秒
   };
+  let fmt = "yyyy-MM-dd hh:mm:ss";
+  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (let k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+  return fmt;
+};
+
+fucntion globalAxiosErrorHandler(errResponse) {
+  const host = window.location.origin;
+  const {
+    timestamp,
+    status,
+    error,
+    path,
+    method
+  } = errResponse;
+  console.error(`${dateFormat(timestamp)}  ${method.toUpperCase()}: ${host}${path}  ${status} (${error})`);
+};
+
+function judgePostData(method, postedData) {
+  if (method === 'DELETE' || method === 'GET') {
+    return {
+      method,
+      params: postedData
+    };
+  } else {
+    return 'data' in postedData
+      ? {
+        method,
+        ...postedData
+      }
+      : {
+        method,
+        data: postedData
+      };
+  }
 }
 
 export default {
