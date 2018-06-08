@@ -103,9 +103,9 @@ const del = (url, postData) => networkCall(instance(url, {
 }));
 
 
-async function all(axiosPromiseAarry) {
+async function all(axiosPromiseArray) {
   try {
-    return await Promise.all(axiosPromiseAarry);
+    return await Promise.all(axiosPromiseArry);
   } catch (error) {
     console.info('axios all error', error);
     return Promise.reject(error);
